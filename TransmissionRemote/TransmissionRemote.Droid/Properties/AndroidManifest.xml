@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="TransmissionRemote.TransmissionRemote" android:installLocation="auto" android:versionCode="1" android:versionName="Alpha">
+	<uses-sdk android:targetSdkVersion="17" android:minSdkVersion="17" />
+	<application android:label="TransmissionRemote" android:icon="@drawable/Icon"></application>
+</manifest>
