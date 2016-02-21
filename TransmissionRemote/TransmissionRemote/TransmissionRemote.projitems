@@ -12,5 +12,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\BaseModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums\TorrentState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\TorrentItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ITorrentListManager.cs" />
   </ItemGroup>
 </Project>

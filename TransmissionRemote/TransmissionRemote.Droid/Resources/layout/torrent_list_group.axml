@@ -4,11 +4,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     <TextView
-        android:id="@+id/TorrentStatus"
+        android:id="@+id/torrent_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="TorrentStatus"
+        android:text="Torrent Status"
         android:layout_margin="2dp"
         android:textStyle="bold"
         android:paddingStart="50dp"

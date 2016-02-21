@@ -11,7 +11,7 @@ namespace TransmissionRemote.Models
         public string Name
         {
             get { return name; }
-            set { SetField(ref name, value, nameof(Name)); }
+            set { SetField(ref name, value, "Name"); }
         }
 
         public int Id { get; set; }
@@ -19,15 +19,18 @@ namespace TransmissionRemote.Models
         public TorrentState State
         {
             get { return state; }
-            set { SetField(ref state, value, nameof(State)); }
+            set { SetField(ref state, value, "State"); }
         }
 
         public bool IsVisible
         {
             get { return isVisible; }
-            set { SetField(ref isVisible, value, nameof(IsVisible)); }
+            set { SetField(ref isVisible, value, "IsVisible"); }
         }
 
-        public override string ToString() => Name;
+        public override string ToString()
+		{
+			return Id + ". " + Name;
+		}
     }
 }
