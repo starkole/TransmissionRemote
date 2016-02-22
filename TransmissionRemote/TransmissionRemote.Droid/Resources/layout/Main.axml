@@ -12,9 +12,10 @@
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
-        <include
-            android:id="@+id/all_torrents_list"
-            layout="@layout/all_torrents_list" />
+        <FrameLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
     <include
         android:id="@+id/left_drawer"

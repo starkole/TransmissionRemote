@@ -8,11 +8,11 @@ using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using com.refractored.fab;
-using TransmissionRemote.Models;
-using TransmissionRemote.Models.Enums;
+using Fragment = Android.Support.V4.App.Fragment;
 
 using Toolbar = Android.Support.V7.Widget.Toolbar;
+using TransmissionRemote.Droid.Fragments;
+using Java.Lang;
 
 namespace TransmissionRemote.Droid
 {
@@ -21,13 +21,11 @@ namespace TransmissionRemote.Droid
     {
         #region Declarations
 
-        private int counter;
         private TrActionBarDrawerToggle drawerToggle;
-        private TorrentListManager torrentListManager;
         private DrawerLayout drawerLayout;
         private static readonly string[] drawerMenuSections =
             {
-                "Browse", "Friends", "Profile"
+                "Browse", "Friends", "Profile", "All Torrents List"
             };
 
         #endregion
@@ -44,9 +42,9 @@ namespace TransmissionRemote.Droid
         {
             base.OnCreate(savedInstanceState);
 
-            SetContentView(Resource.Layout.main);
+			SetContentView(Resource.Layout.main);
 
-            setupDrawerMenu();   
+            setupDrawerMenu();
             setupTorrentsList();
             setupActionBar();
         }
@@ -87,36 +85,38 @@ namespace TransmissionRemote.Droid
         {
             var drawerListView = FindViewById<ListView>(Resource.Id.left_drawer_list);
             drawerListView.Adapter = new ArrayAdapter<string>(this, Resource.Layout.item_menu, drawerMenuSections);
-            drawerListView.ItemClick += (sender, args) =>
+			drawerListView.ItemClick += (sender, e) =>
             {
-                showToast("Drawer menu item selected: " + args.Position);
-                drawerListView.SetItemChecked(args.Position, true);
+				// Here we create new fragment
+					switch (Array.IndexOf (drawerMenuSections, ((TextView)e.View).Text))
+					{
+						case 0:
+							var firstItemFragment = new FirstItemFragment();
+							this.createFragment(firstItemFragment);
+							break;
+						case 1:
+							var secondItemFragment = new SecondItemFragment();
+							this.createFragment(secondItemFragment);
+							break;
+						case 2:
+							var thirdItemFragment = new ThirdItemFragment();
+							this.createFragment(thirdItemFragment);
+							break;
+						case 3:
+							var mainFragment = new MainFragment();
+							this.createFragment(mainFragment);
+							break;						
+					}
+
+                drawerListView.SetItemChecked(e.Position, true);
                 drawerLayout.CloseDrawers();
             };
         }
 
         private void setupTorrentsList()
         {
-            ExpandableListView torrentsList = FindViewById<ExpandableListView>(Resource.Id.torrents_list);
-            torrentListManager = new TorrentListManager();
-            var torrentItems = torrentListManager.GetAll();
-            var adapter = new TorrentsListAdapter(this, torrentItems);
-            torrentsList.SetAdapter(adapter);
-            var fab = FindViewById<FloatingActionButton>(Resource.Id.fab_add);
-            fab.Click += (sender, args) =>
-            {
-                torrentItems.Add(new TorrentItem
-                    { 
-                        Id = 10 + counter++, 
-                        Name = "Added " + counter.ToString(), 
-                        State = TorrentState.QueuedForDownload 
-                    });
-                adapter.NotifyDataSetChanged();
-                var lastGroupPosition = adapter.GroupCount - 1;
-                var lastChildPosition = adapter.GetChildrenCount(lastGroupPosition) - 1;
-                torrentsList.ExpandGroup(lastGroupPosition, true);
-                torrentsList.SetSelectedChild(lastGroupPosition, lastChildPosition, true);
-            };
+			var fragment = new MainFragment();
+			this.createFragment(fragment);
         }
 
         private void setupActionBar()
@@ -134,16 +134,6 @@ namespace TransmissionRemote.Droid
                 Resource.String.drawer_open,
                 Resource.String.drawer_close);
 
-            this.drawerToggle.DrawerClosed += (o, args) =>
-            {
-                this.InvalidateOptionsMenu();
-            };
-
-            this.drawerToggle.DrawerOpened += (o, args) =>
-            {
-                this.InvalidateOptionsMenu();
-            };
-
             this.drawerLayout.SetDrawerListener(this.drawerToggle);
         }
 
@@ -151,6 +141,14 @@ namespace TransmissionRemote.Droid
         {
             Toast.MakeText(this, message, ToastLength.Short).Show();
         }
+
+		private void createFragment(Fragment fragment)
+		{
+			var fragmentTransaction = this.SupportFragmentManager.BeginTransaction();
+			fragmentTransaction.Replace(Resource.Id.content_frame, fragment);
+			fragmentTransaction.AddToBackStack(null);
+			fragmentTransaction.Commit();
+		}
 
         #endregion
 

@@ -70,6 +70,10 @@
     <Compile Include="TorrentListManager.cs" />
     <Compile Include="TorrentsListAdapter.cs" />
     <Compile Include="TrActionBarDrawerToggle.cs" />
+    <Compile Include="Fragments\FirstItemFragment.cs" />
+    <Compile Include="Fragments\MainFragment.cs" />
+    <Compile Include="Fragments\SecondItemFragment.cs" />
+    <Compile Include="Fragments\ThirdItemFragment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -109,6 +113,9 @@
     <AndroidResource Include="Resources\drawable-anydpi-v21\ic_add_white_24dp.xml" />
     <AndroidResource Include="Resources\drawable-anydpi-v21\ic_arrow_back_white_24dp.xml" />
     <AndroidResource Include="Resources\drawable-anydpi-v21\ic_menu_white_24dp.xml" />
+    <AndroidResource Include="Resources\layout\first_item_click_fragment.axml" />
+    <AndroidResource Include="Resources\layout\second_item_click_fragment.axml" />
+    <AndroidResource Include="Resources\layout\third_item_click_fragment.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
@@ -319,4 +326,7 @@
   </ItemGroup>
   <Import Project="..\TransmissionRemote\TransmissionRemote.projitems" Label="Shared" Condition="Exists('..\TransmissionRemote\TransmissionRemote.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Fragments\" />
+  </ItemGroup>
 </Project>

@@ -21,9 +21,9 @@ namespace TransmissionRemote.Droid
         private readonly IList<TorrentItem> torrentItems;
         private readonly FragmentActivity context;
 
-        public TorrentsListAdapter(FragmentActivity context, IList<TorrentItem> torrentItems)
+        public TorrentsListAdapter(Fragment fragment, IList<TorrentItem> torrentItems)
         {
-            this.context = context;
+			this.context = fragment.Activity;
             this.torrentItems = torrentItems;
         }
 

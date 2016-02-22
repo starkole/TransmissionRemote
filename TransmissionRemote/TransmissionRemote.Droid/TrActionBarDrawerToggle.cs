@@ -17,6 +17,8 @@ namespace TransmissionRemote.Droid
 
     public class TrActionBarDrawerToggle : Android.Support.V7.App.ActionBarDrawerToggle
     {
+		private readonly Activity _activity;
+
         #region Ctor
 
         public TrActionBarDrawerToggle(Activity activity,
@@ -28,6 +30,7 @@ namespace TransmissionRemote.Droid
                    openDrawerContentDescRes,
                    closeDrawerContentDescRes)
         {
+			this._activity = activity;
         }
 
         public TrActionBarDrawerToggle(Activity activity,
@@ -41,6 +44,7 @@ namespace TransmissionRemote.Droid
                    openDrawerContentDescRes,
                    closeDrawerContentDescRes)
         {
+			this._activity = activity;
         }
 
         #endregion
@@ -61,6 +65,7 @@ namespace TransmissionRemote.Droid
             if (null != this.DrawerClosed)
                 this.DrawerClosed(this, new TrActionBarDrawerEventArgs { DrawerView = drawerView });
             base.OnDrawerClosed(drawerView);
+			this._activity.InvalidateOptionsMenu();
         }
 
         public override void OnDrawerOpened(View drawerView)
@@ -68,6 +73,7 @@ namespace TransmissionRemote.Droid
             if (null != this.DrawerOpened)
                 this.DrawerOpened(this, new TrActionBarDrawerEventArgs { DrawerView = drawerView });
             base.OnDrawerOpened(drawerView);
+			this._activity.InvalidateOptionsMenu();
         }
 
         public override void OnDrawerSlide(View drawerView, float slideOffset)
