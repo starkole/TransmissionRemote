@@ -13,6 +13,9 @@ using Fragment = Android.Support.V4.App.Fragment;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 using TransmissionRemote.Droid.Fragments;
 using Java.Lang;
+using Android.Support.Design.Widget;
+using Android.Support.V4.View;
+using TransmissionRemote.Models.Enums;
 
 namespace TransmissionRemote.Droid
 {
@@ -21,6 +24,8 @@ namespace TransmissionRemote.Droid
     {
         #region Declarations
 
+        private List<TorrentState> filters = new List<TorrentState>();
+        private MainFragment mainFragment;
         private TrActionBarDrawerToggle drawerToggle;
         private DrawerLayout drawerLayout;
         private static readonly string[] drawerMenuSections =
@@ -42,7 +47,7 @@ namespace TransmissionRemote.Droid
         {
             base.OnCreate(savedInstanceState);
 
-			SetContentView(Resource.Layout.main);
+            SetContentView(Resource.Layout.main);
 
             setupDrawerMenu();
             setupTorrentsList();
@@ -56,6 +61,12 @@ namespace TransmissionRemote.Droid
             {
                 menu.GetItem(i).SetVisible(!drawerOpen);
             }
+            var drawer2Open = this.drawerLayout.IsDrawerOpen((int)GravityFlags.End);
+            for (int i = 0; i < menu.Size(); i++)
+            {
+                menu.GetItem(i).SetVisible(!drawer2Open);
+            }
+
             return base.OnPrepareOptionsMenu(menu);
         }
 
@@ -73,8 +84,15 @@ namespace TransmissionRemote.Droid
 
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-            showToast("Toolbar item pressed: " + item.TitleFormatted);
-            return this.drawerToggle.OnOptionsItemSelected(item) || base.OnOptionsItemSelected(item);
+            switch (item.ItemId)
+            {
+                case Resource.Id.menu_share:
+                    this.drawerLayout.OpenDrawer(GravityCompat.End);
+                    return true;
+
+                default:
+                    return base.OnOptionsItemSelected(item);
+            } 
         }
 
         #endregion
@@ -83,30 +101,88 @@ namespace TransmissionRemote.Droid
 
         private void setupDrawerMenu()
         {
+            // Right drawer
+            var view = this.FindViewById<NavigationView>(Resource.Id.navigationView);
+            view.NavigationItemSelected += (object sender, NavigationView.NavigationItemSelectedEventArgs e) =>
+            {
+                var itemId = e.MenuItem.ItemId;               
+                e.MenuItem.SetChecked(!e.MenuItem.IsChecked);
+
+                switch (itemId)
+                {
+                    case Resource.Id.nav_home: 
+                        this.showToast(itemId.ToString());
+                        this.drawerLayout.CloseDrawers();
+                        break;
+
+                    case Resource.Id.nav_downloading: 
+                        this.drawerLayout.CloseDrawers();
+                            if(e.MenuItem.IsChecked)
+                            {
+                                filters.Add(TorrentState.Downloading);
+                            }
+                            else
+                            {
+                                filters.Remove(TorrentState.Downloading);
+                            }
+                        
+                        break;
+
+                    case Resource.Id.nav_complete: 
+                        this.drawerLayout.CloseDrawers();                       
+                            if(e.MenuItem.IsChecked)
+                            {
+                                filters.Add(TorrentState.Complete);
+                            }
+                            else
+                            {
+                                filters.Remove(TorrentState.Complete);
+                            }
+                        break;
+
+                    case Resource.Id.nav_paused: 
+                        this.drawerLayout.CloseDrawers();
+                            if(e.MenuItem.IsChecked)
+                            {
+                                filters.Add(TorrentState.Paused);
+                            }
+                            else
+                            {
+                                filters.Remove(TorrentState.Paused);
+                            }                     
+                        break;
+                }
+                if (filters.Count > 0)
+                {
+                    this.mainFragment.FilterTorrentItems(filters);
+                }
+            };
+
+            // Left drawer
             var drawerListView = FindViewById<ListView>(Resource.Id.left_drawer_list);
             drawerListView.Adapter = new ArrayAdapter<string>(this, Resource.Layout.item_menu, drawerMenuSections);
-			drawerListView.ItemClick += (sender, e) =>
+            drawerListView.ItemClick += (sender, e) =>
             {
-				// Here we create new fragment
-					switch (Array.IndexOf (drawerMenuSections, ((TextView)e.View).Text))
-					{
-						case 0:
-							var firstItemFragment = new FirstItemFragment();
-							this.createFragment(firstItemFragment);
-							break;
-						case 1:
-							var secondItemFragment = new SecondItemFragment();
-							this.createFragment(secondItemFragment);
-							break;
-						case 2:
-							var thirdItemFragment = new ThirdItemFragment();
-							this.createFragment(thirdItemFragment);
-							break;
-						case 3:
-							var mainFragment = new MainFragment();
-							this.createFragment(mainFragment);
-							break;						
-					}
+                // Here we create new fragment
+                switch (Array.IndexOf(drawerMenuSections, ((TextView)e.View).Text))
+                {
+                    case 0:
+                        var firstItemFragment = new FirstItemFragment();
+                        this.createFragment(firstItemFragment);
+                        break;
+                    case 1:
+                        var secondItemFragment = new SecondItemFragment();
+                        this.createFragment(secondItemFragment);
+                        break;
+                    case 2:
+                        var thirdItemFragment = new ThirdItemFragment();
+                        this.createFragment(thirdItemFragment);
+                        break;
+                    case 3:
+                        this.mainFragment = new MainFragment();
+                        this.createFragment(this.mainFragment);
+                        break;						
+                }
 
                 drawerListView.SetItemChecked(e.Position, true);
                 drawerLayout.CloseDrawers();
@@ -115,8 +191,8 @@ namespace TransmissionRemote.Droid
 
         private void setupTorrentsList()
         {
-			var fragment = new MainFragment();
-			this.createFragment(fragment);
+            this.mainFragment = new MainFragment();
+            this.createFragment(this.mainFragment);
         }
 
         private void setupActionBar()
@@ -142,13 +218,13 @@ namespace TransmissionRemote.Droid
             Toast.MakeText(this, message, ToastLength.Short).Show();
         }
 
-		private void createFragment(Fragment fragment)
-		{
-			var fragmentTransaction = this.SupportFragmentManager.BeginTransaction();
-			fragmentTransaction.Replace(Resource.Id.content_frame, fragment);
-			fragmentTransaction.AddToBackStack(null);
-			fragmentTransaction.Commit();
-		}
+        private void createFragment(Fragment fragment)
+        {
+            var fragmentTransaction = this.SupportFragmentManager.BeginTransaction();
+            fragmentTransaction.Replace(Resource.Id.content_frame, fragment);
+            fragmentTransaction.AddToBackStack(null);
+            fragmentTransaction.Commit();
+        }
 
         #endregion
 

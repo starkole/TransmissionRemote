@@ -23,6 +23,9 @@ namespace TransmissionRemote.Droid.Fragments
         private ExpandableListView torrentsList;
         private TorrentListManager torrentListManager;
         private int counter;
+        private IList<TorrentItem> allTorrentItems;
+        private IList<TorrentItem> torrentItems = new List<TorrentItem>();
+        private TorrentsListAdapter adapter;
 
         public override void OnCreate(Bundle savedInstanceState)
         {
@@ -43,9 +46,13 @@ namespace TransmissionRemote.Droid.Fragments
 
             this.torrentListManager = new TorrentListManager();
 
-            var torrentItems = torrentListManager.GetAll();
-            var adapter = new TorrentsListAdapter(this, torrentItems);
-            torrentsList.SetAdapter(adapter);
+            this.allTorrentItems = torrentListManager.GetAll();
+            foreach(var item in this.allTorrentItems)
+            {
+                this.torrentItems.Add(item);
+            }
+            this.adapter = new TorrentsListAdapter(this, this.torrentItems);
+            this.torrentsList.SetAdapter(adapter);
             var fab = view.FindViewById<FloatingActionButton>(Resource.Id.fab_add);
             fab.Click += (sender, args) =>
             {
@@ -63,6 +70,13 @@ namespace TransmissionRemote.Droid.Fragments
             };
 
             return view;
+        }
+
+        public void FilterTorrentItems(List<TorrentState> states)
+        {
+            this.torrentItems = this.allTorrentItems.Where(i => states.Any(s=>s.Equals(i.State))).ToList();
+            this.adapter = new TorrentsListAdapter(this, this.torrentItems);
+            this.torrentsList.SetAdapter(adapter);           
         }
     }
 }

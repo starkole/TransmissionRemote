@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Transmission Remote</string>
-    <string name="drawer_open">Open</string>
-    <string name="drawer_close">Close</string>
+    <string
+        name="app_name">Transmission Remote</string>
+    <string
+        name="drawer_open">Open</string>
+    <string
+        name="drawer_close">Close</string>
+    <string
+        name="internal">INTERNAL</string>
 </resources>

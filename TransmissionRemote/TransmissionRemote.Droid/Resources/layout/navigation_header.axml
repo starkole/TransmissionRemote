@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:orientation="vertical">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_green_dark"
+        android:scaleType="centerCrop" />
+    <refractored.controls.CircleImageView
+        android:id="@+id/meal_image_order"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@drawable/patient"
+        android:layout_gravity="center"
+        local:civ_border_width="2dp"
+        local:civ_border_color="@android:color/white" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="10dp"
+        android:text="Angelina Jolie"
+        android:textColor="@android:color/white" />
+</FrameLayout>
