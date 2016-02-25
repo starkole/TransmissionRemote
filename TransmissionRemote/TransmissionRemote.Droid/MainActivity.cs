@@ -46,7 +46,6 @@ namespace TransmissionRemote.Droid
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
             SetContentView(Resource.Layout.main);
 
             setupDrawerMenu();
@@ -116,46 +115,19 @@ namespace TransmissionRemote.Droid
                         break;
 
                     case Resource.Id.nav_downloading: 
-                        this.drawerLayout.CloseDrawers();
-                            if(e.MenuItem.IsChecked)
-                            {
-                                filters.Add(TorrentState.Downloading);
-                            }
-                            else
-                            {
-                                filters.Remove(TorrentState.Downloading);
-                            }
-                        
+                        this.PrepareTorrentListFilter(e.MenuItem, TorrentState.Downloading);
                         break;
 
                     case Resource.Id.nav_complete: 
-                        this.drawerLayout.CloseDrawers();                       
-                            if(e.MenuItem.IsChecked)
-                            {
-                                filters.Add(TorrentState.Complete);
-                            }
-                            else
-                            {
-                                filters.Remove(TorrentState.Complete);
-                            }
+                        this.PrepareTorrentListFilter(e.MenuItem, TorrentState.Complete);
                         break;
 
                     case Resource.Id.nav_paused: 
-                        this.drawerLayout.CloseDrawers();
-                            if(e.MenuItem.IsChecked)
-                            {
-                                filters.Add(TorrentState.Paused);
-                            }
-                            else
-                            {
-                                filters.Remove(TorrentState.Paused);
-                            }                     
+                        this.PrepareTorrentListFilter(e.MenuItem, TorrentState.Paused);         
                         break;
                 }
-                if (filters.Count > 0)
-                {
-                    this.mainFragment.FilterTorrentItems(filters);
-                }
+
+                this.mainFragment.FilterTorrentItems(filters);
             };
 
             // Left drawer
@@ -224,6 +196,19 @@ namespace TransmissionRemote.Droid
             fragmentTransaction.Replace(Resource.Id.content_frame, fragment);
             fragmentTransaction.AddToBackStack(null);
             fragmentTransaction.Commit();
+        }
+
+        private void PrepareTorrentListFilter(IMenuItem item, TorrentState state)
+        {
+            this.drawerLayout.CloseDrawers();
+            if (item.IsChecked)
+            {
+                this.filters.Add(state);
+            }
+            else
+            {
+                this.filters.Remove(state);
+            }        
         }
 
         #endregion

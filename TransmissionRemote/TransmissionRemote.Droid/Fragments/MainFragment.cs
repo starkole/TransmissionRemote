@@ -47,11 +47,11 @@ namespace TransmissionRemote.Droid.Fragments
             this.torrentListManager = new TorrentListManager();
 
             this.allTorrentItems = torrentListManager.GetAll();
-            foreach(var item in this.allTorrentItems)
+            foreach (var item in this.allTorrentItems)
             {
                 this.torrentItems.Add(item);
             }
-            this.adapter = new TorrentsListAdapter(this, this.torrentItems);
+            adapter = new TorrentsListAdapter(this, this.torrentItems);
             this.torrentsList.SetAdapter(adapter);
             var fab = view.FindViewById<FloatingActionButton>(Resource.Id.fab_add);
             fab.Click += (sender, args) =>
@@ -74,9 +74,11 @@ namespace TransmissionRemote.Droid.Fragments
 
         public void FilterTorrentItems(List<TorrentState> states)
         {
-            this.torrentItems = this.allTorrentItems.Where(i => states.Any(s=>s.Equals(i.State))).ToList();
-            this.adapter = new TorrentsListAdapter(this, this.torrentItems);
-            this.torrentsList.SetAdapter(adapter);           
+            this.torrentItems = states.Count == 0 ? this.allTorrentItems :
+                this.allTorrentItems.Where(i => states.Any(s => s.Equals(i.State))).ToList(); 
+            
+            var adapter = new TorrentsListAdapter(this, this.torrentItems);
+            this.torrentsList.SetAdapter(adapter);
         }
     }
 }

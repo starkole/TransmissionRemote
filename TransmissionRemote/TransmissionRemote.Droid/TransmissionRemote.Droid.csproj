@@ -136,6 +136,21 @@
     <AndroidResource Include="Resources\drawable-xhdpi\patient.jpg" />
     <AndroidResource Include="Resources\drawable-xxhdpi\patient.jpg" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\patient.jpg" />
+    <AndroidResource Include="Resources\drawable-hdpi\patient2.jpg" />
+    <AndroidResource Include="Resources\drawable-mdpi\patient2.jpg" />
+    <AndroidResource Include="Resources\drawable-xhdpi\patient2.jpg" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\patient2.jpg" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\patient2.jpg" />
+    <AndroidResource Include="Resources\drawable-hdpi\patient3.jpg" />
+    <AndroidResource Include="Resources\drawable-hdpi\patient4.jpg" />
+    <AndroidResource Include="Resources\drawable-mdpi\patient3.jpg" />
+    <AndroidResource Include="Resources\drawable-mdpi\patient4.jpg" />
+    <AndroidResource Include="Resources\drawable-xhdpi\patient3.jpg" />
+    <AndroidResource Include="Resources\drawable-xhdpi\patient4.jpg" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\patient3.jpg" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\patient4.jpg" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\patient3.jpg" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\patient4.jpg" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
