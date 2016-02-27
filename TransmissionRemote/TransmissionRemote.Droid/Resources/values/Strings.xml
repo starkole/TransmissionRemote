@@ -5,6 +5,10 @@
     <string name="drawer_close">Close</string>
     <string name="internal">INTERNAL</string>
     <string name="qrcode_generation_error">Cannot generate QR code</string>
+    <string name="qrcode_scanner_top_text">Hold the camera up to the barcode \nabout 15 cm away</string>
+    <string name="qrcode_scanner_bottom_text">Wait for the barcode to automatically scan \nor press "Back" button to cancel</string>
+    <string name="qrcode_scanner_nothing_scanned_message">No QR code was scanned</string>
+    <string name="qrcode_scanner_invalid_qrcode_message">QR code does not contain valid address</string>
     <string name="preference_key_server_address">server_address</string>
     <string name="preference_key_server_port">server_port</string>
     <string name="preference_key_server_additional_address">server_additional_address</string>

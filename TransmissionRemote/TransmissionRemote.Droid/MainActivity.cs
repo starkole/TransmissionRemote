@@ -16,6 +16,7 @@ using Java.Lang;
 using Android.Support.Design.Widget;
 using Android.Support.V4.View;
 using TransmissionRemote.Models.Enums;
+using TransmissionRemote.Droid.Preferences;
 
 namespace TransmissionRemote.Droid
 {
@@ -143,7 +144,7 @@ namespace TransmissionRemote.Droid
                         this.createFragment(firstItemFragment);
                         break;
                     case 1:
-                        this.createFragment(new ServerPreferencesActivity());
+                        this.createFragment(new ServerPreferencesFragment());
                         break;
                     case 2:
                         var thirdItemFragment = new ThirdItemFragment();

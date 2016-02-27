@@ -11,7 +11,7 @@
         android:title="@string/preference_title_server_address"
         android:summary="@string/preference_summary_default_value"
         android:defaultValue=""
-        android:dialogTitle="@string/preference_title_server_addresst" />
+        android:dialogTitle="@string/preference_title_server_address" />
     <EditTextPreference
         android:icon="@drawable/ic_compass_outline_grey600_36dp"
         android:key="@string/preference_key_server_port"

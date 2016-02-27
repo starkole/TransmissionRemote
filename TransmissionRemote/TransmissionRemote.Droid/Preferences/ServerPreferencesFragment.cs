@@ -1,86 +1,101 @@
 ﻿using System;
-using System.Collections.Generic;
-using Android.App;
-using Android.Content;
 using Android.OS;
 using Android.Support.V7.Preferences;
-using Android.Runtime;
-using Android.Util;
+using Android.Views;
 using Android.Widget;
 using com.refractored.fab;
-using ZXing;
 using ZXing.Mobile;
-
+using Fragment = Android.Support.V4.App.Fragment;
 
 namespace TransmissionRemote.Droid.Preferences
 {
-	public class ServerPreferencesFragment : PreferenceFragmentCompat, ISharedPreferencesOnSharedPreferenceChangeListener
-	{
-		ISharedPreferences sharedPreferences;
-
-		private void refreshPreferences() {
-			for (int i=0; i < this.PreferenceScreen.PreferenceCount; i++)
-			{
-				this.OnSharedPreferenceChanged (sharedPreferences, this.PreferenceScreen.GetPreference (i).Key);
-			}
-		}
-
-		public override void OnCreatePreferences (Bundle savedInstance, string key) 
-		{				
-			AddPreferencesFromResource (Resource.Layout.server_preferences_fragment);
-
-			sharedPreferences = PreferenceManager.GetDefaultSharedPreferences (this.Activity.ApplicationContext);
-
-			Preference generateQrCodePrefrence = this.FindPreference ("generated_qr_code");
-            generateQrCodePrefrence.PreferenceClick += (object sender, Preference.PreferenceClickEventArgs e) => 
-                {
-                    var settingsSummary = buildSettingsSummaryString();
-                    if (string.IsNullOrEmpty(settingsSummary)) 
-                    {
-                        return;
-                    }
-
-                    var intent = new Intent (this.Activity.ApplicationContext, typeof(QrCodeImageView));
-                    intent.PutExtra("foo", "bar");
-                    StartActivity(intent);
-                };
-            
-
-			refreshPreferences ();
-		}
-
-		public override void OnResume()
-		{
-			base.OnResume();
-			this.PreferenceScreen.SharedPreferences.RegisterOnSharedPreferenceChangeListener(this);
-			refreshPreferences ();
-		}
-
-		public override void OnPause()
-		{			
-			base.OnPause();
-			this.PreferenceScreen.SharedPreferences.UnregisterOnSharedPreferenceChangeListener(this);
-		}
-
-		public void OnSharedPreferenceChanged (ISharedPreferences sharedPreferences, string key)
-		{
-			var preference = this.FindPreference(key) as EditTextPreference;
-			if (preference != null) {
-				preference.Summary = sharedPreferences.GetString(key, preference.Summary);
-			}
-		}
-
-        private string buildSettingsSummaryString()
+    public class ServerPreferencesFragment : Fragment
+    {
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            var sharedPreferences = PreferenceManager.GetDefaultSharedPreferences(this.ApplicationContext);
-            var address = sharedPreferences.GetString(Resources.GetString(Resource.String.preference_key_server_address), string.Empty);
-            if (string.IsNullOrEmpty(address))
+            base.OnCreateView(inflater, container, savedInstanceState);
+
+            var view = inflater.Inflate(Resource.Layout.fragment_server_preferences, container, false);
+            Activity.SupportFragmentManager
+                .BeginTransaction()
+                .Replace(Resource.Id.server_preferences_list_content_frame, new ServerPreferencesListFragment())
+                .Commit();
+
+            var scanQrcodeFab = view.FindViewById<FloatingActionButton>(Resource.Id.server_preferences_fab_qrcode_scan);
+            scanQrcodeFab.Click -= onScanQrcodeFabClick;
+            scanQrcodeFab.Click += onScanQrcodeFabClick;
+
+            return view;
+        }
+
+        private async void onScanQrcodeFabClick(object sender, EventArgs e)
+        {
+            MobileBarcodeScanner.Initialize(Activity.Application);
+            var scanner = new MobileBarcodeScanner
             {
+                TopText = Resources.GetString(Resource.String.qrcode_scanner_top_text),
+                BottomText = Resources.GetString(Resource.String.qrcode_scanner_bottom_text)
+            };
+
+            var result = await scanner.Scan();
+            if (result == null)
+            {
+                Toast.MakeText(Activity, Resources.GetString(Resource.String.qrcode_scanner_nothing_scanned_message), ToastLength.Short).Show();
                 return;
             }
-            var port = sharedPreferences.GetString("server_port", string.Empty);
-            var qrCodeString = string.IsNullOrEmpty(port) ? address : address + ":" + port;
+
+            handleScanResult(result.Text);
         }
-	}
+
+        private void showInvalidQrcodeMessage()
+        {
+            Toast.MakeText(Activity, Resources.GetString(Resource.String.qrcode_scanner_invalid_qrcode_message), ToastLength.Short).Show();
+        }
+
+        private void handleScanResult(string result)
+        {
+            if (string.IsNullOrEmpty(result))
+            {
+                showInvalidQrcodeMessage();
+                return;
+            }
+
+            string serverAddress;
+            string serverPort;
+            string additionalAddressString;
+
+            try
+            {
+                var uri = new Uri(result);
+
+                if (string.IsNullOrEmpty(uri.Host))
+                {
+                    showInvalidQrcodeMessage();
+                    return;
+                }
+
+                serverAddress = uri.Scheme + Uri.SchemeDelimiter + uri.Host;
+                serverPort = uri.IsDefaultPort || uri.Port == -1 ? string.Empty : uri.Port.ToString();
+                additionalAddressString = uri.PathAndQuery;
+            }
+            catch (Exception ex)
+            {
+                if (ex is UriFormatException || ex is InvalidOperationException)
+                {
+                    showInvalidQrcodeMessage();
+                    return;
+                }
+
+                throw;
+            }
+
+            var sharedPreferences = PreferenceManager.GetDefaultSharedPreferences(Activity.ApplicationContext);
+            var prefsEditor = sharedPreferences.Edit();
+            prefsEditor.PutString(Resources.GetString(Resource.String.preference_key_server_address), serverAddress);
+            prefsEditor.PutString(Resources.GetString(Resource.String.preference_key_server_port), serverPort);
+            prefsEditor.PutString(Resources.GetString(Resource.String.preference_key_server_additional_address), additionalAddressString);
+            prefsEditor.Commit();
+        }
+    }
 }
 

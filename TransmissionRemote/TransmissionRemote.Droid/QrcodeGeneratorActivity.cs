@@ -1,27 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Support.V7.Preferences;
 using Android.Widget;
 
-namespace TransmissionRemote.Droid.Preferences
+namespace TransmissionRemote.Droid
 {
     [Activity(Label = "QrcodeGeneratorActivity")]
     public class QrcodeGeneratorActivity: Activity
     {
         ImageView imageBarcode;
-
-        protected override void OnCreate(Bundle bundle)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(bundle);
-            var stringToConvert = Intent.GetStringExtra("MyData");
+            base.OnCreate(savedInstanceState);
+            var stringToConvert = Intent.GetStringExtra(AndroidConstants.QrcodeStringKey);
             if (string.IsNullOrEmpty(stringToConvert))
             {
                 Toast.MakeText(this, Resources.GetString(Resource.String.qrcode_generation_error), ToastLength.Short).Show();
