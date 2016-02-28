@@ -16,6 +16,7 @@ using Java.Lang;
 using Android.Support.Design.Widget;
 using Android.Support.V4.View;
 using TransmissionRemote.Models.Enums;
+using TransmissionRemote.Droid.CollapsiblePanel;
 
 namespace TransmissionRemote.Droid
 {
@@ -30,7 +31,7 @@ namespace TransmissionRemote.Droid
         private DrawerLayout drawerLayout;
         private static readonly string[] drawerMenuSections =
             {
-                "Browse", "Friends", "Profile", "All Torrents List"
+                "Browse", "Friends", "Collapsible panel", "All Torrents List"
             };
 
         #endregion
@@ -147,8 +148,7 @@ namespace TransmissionRemote.Droid
                         this.createFragment(secondItemFragment);
                         break;
                     case 2:
-                        var thirdItemFragment = new ThirdItemFragment();
-                        this.createFragment(thirdItemFragment);
+                        this.createFragment(new CollapsiblePanelFragment());
                         break;
                     case 3:
                         this.mainFragment = new MainFragment();
