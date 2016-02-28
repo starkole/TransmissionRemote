@@ -365,11 +365,19 @@
   </ItemGroup>
   <Import Project="..\TransmissionRemote\TransmissionRemote.projitems" Label="Shared" Condition="Exists('..\TransmissionRemote\TransmissionRemote.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
-  <ItemGroup />
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\lorem_ipsum.xml" />
+  </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="xamandroidsupportdesign">
       <Visible>False</Visible>
       <Version>23.1.1.0</Version>
     </XamarinComponentReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\dimens.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-nodpi\material_flat.png" />
   </ItemGroup>
 </Project>
