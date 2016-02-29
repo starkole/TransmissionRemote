@@ -35,6 +35,9 @@ namespace TransmissionRemote.Droid.CollapsiblePanel
             initialHeight = appBar.LayoutParameters.Height;
             smallHeight = initialHeight / 3;
 
+            // Set initial panel state to be small
+            onCollapsingToolbarLayoutClick(collapsingToolbarLayout, new EventArgs());
+
             return view;
         }
 

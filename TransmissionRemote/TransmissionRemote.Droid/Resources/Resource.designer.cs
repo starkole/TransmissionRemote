@@ -1928,20 +1928,23 @@ namespace TransmissionRemote.Droid
 			// aapt resource value: 0x7f02005e
 			public const int material_flat = 2130837598;
 			
-			// aapt resource value: 0x7f020063
-			public const int notification_template_icon_bg = 2130837603;
-			
 			// aapt resource value: 0x7f02005f
-			public const int patient = 2130837599;
+			public const int monoandroidsplash = 2130837599;
+			
+			// aapt resource value: 0x7f020064
+			public const int notification_template_icon_bg = 2130837604;
 			
 			// aapt resource value: 0x7f020060
-			public const int patient2 = 2130837600;
+			public const int patient = 2130837600;
 			
 			// aapt resource value: 0x7f020061
-			public const int patient3 = 2130837601;
+			public const int patient2 = 2130837601;
 			
 			// aapt resource value: 0x7f020062
-			public const int patient4 = 2130837602;
+			public const int patient3 = 2130837602;
+			
+			// aapt resource value: 0x7f020063
+			public const int patient4 = 2130837603;
 			
 			static Drawable()
 			{
@@ -3241,6 +3244,9 @@ namespace TransmissionRemote.Droid
 			
 			// aapt resource value: 0x7f090134
 			public const int Base_Widget_Design_TabLayout = 2131296564;
+			
+			// aapt resource value: 0x7f090146
+			public const int Mono_Android_Theme_Splash = 2131296582;
 			
 			// aapt resource value: 0x7f090144
 			public const int MyTheme = 2131296580;
