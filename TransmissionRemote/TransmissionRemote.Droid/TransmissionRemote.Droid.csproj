@@ -28,6 +28,18 @@
     <AndroidLinkMode>None</AndroidLinkMode>
     <ConsolePause>false</ConsolePause>
     <CodeAnalysisRuleSet>StarkRules.ruleset</CodeAnalysisRuleSet>
+    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidLinkSkip />
+    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+    <BundleAssemblies>False</BundleAssemblies>
+    <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+    <AndroidSupportedAbis>armeabi-v7a,x86</AndroidSupportedAbis>
+    <AndroidStoreUncompressedFileExtensions>.dll;.png;.jpg</AndroidStoreUncompressedFileExtensions>
+    <MandroidI18n />
+    <Debugger>Xamarin</Debugger>
+    <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
+    <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -55,6 +67,9 @@
     <Reference Include="Xamarin.Android.Support.v7.AppCompat">
       <HintPath>..\..\packages\Xamarin.Android.Support.v7.AppCompat.23.1.1.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.AppCompat.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Android.Support.v7.Preference">
+      <HintPath>..\..\packages\Xamarin.Android.Support.v7.Preference.23.1.1.0\lib\MonoAndroid41\Xamarin.Android.Support.v7.Preference.dll</HintPath>
+    </Reference>
     <Reference Include="Xamarin.Android.Support.v7.RecyclerView">
       <HintPath>..\..\packages\Xamarin.Android.Support.v7.RecyclerView.23.1.1.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.RecyclerView.dll</HintPath>
     </Reference>
@@ -75,8 +90,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AndroidConstants.cs" />
     <Compile Include="JavaObjectWrapper.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="QrcodeGeneratorActivity.cs" />
+    <Compile Include="Preferences\ServerPreferencesFragment.cs" />
+    <Compile Include="Preferences\ServerPreferencesListFragment.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TorrentListManager.cs" />
@@ -151,6 +170,11 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\patient4.jpg" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\patient3.jpg" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\patient4.jpg" />
+    <AndroidResource Include="Resources\layout\drawer_item_layout.axml" />
+    <AndroidResource Include="Resources\layout\header_layout.axml" />
+    <AndroidResource Include="Resources\layout\qr_code_image_view.axml" />
+    <AndroidResource Include="Resources\layout\fragment_server_preferences_list.axml" />
+    <AndroidResource Include="Resources\layout\fragment_server_preferences.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
@@ -362,12 +386,117 @@
   <Import Project="..\TransmissionRemote\TransmissionRemote.projitems" Label="Shared" Condition="Exists('..\TransmissionRemote\TransmissionRemote.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="Fragments\" />
+    <XamarinComponentReference Include="xamandroidsupportdesign">
+      <Visible>False</Visible>
+      <Version>23.1.1.0</Version>
+    </XamarinComponentReference>
   </ItemGroup>
   <ItemGroup>
-    <XamarinComponentReference Include="xamandroidsupportdesign">
-      <Version>23.0.1.3</Version>
-      <Visible>False</Visible>
-    </XamarinComponentReference>
+    <AndroidResource Include="Resources\drawable\qr_code_logo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\qr_code_logo_36px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_server_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_compass_outline_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_compass_outline_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_compass_outline_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_compass_outline_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_qrcode_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_qrcode_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_qrcode_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_qrcode_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_qrcode_scan_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_qrcode_scan_white_18dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_qrcode_scan_white_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_qrcode_scan_white_36dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_qrcode_scan_white_48dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_server_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_server_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_server_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_compass_outline_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_compass_outline_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_compass_outline_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_compass_outline_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_server_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_server_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_server_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_server_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_qrcode_scan_white_48dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_qrcode_scan_white_36dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_qrcode_scan_white_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_qrcode_scan_white_18dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_qrcode_scan_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_qrcode_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_qrcode_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_qrcode_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_qrcode_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_qrcode_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_qrcode_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_qrcode_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_qrcode_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_qrcode_scan_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_qrcode_scan_white_18dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_qrcode_scan_white_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_qrcode_scan_white_36dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_qrcode_scan_white_48dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_server_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_server_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_server_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_server_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_server_plus_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_server_plus_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_server_plus_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_server_plus_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_compass_outline_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_compass_outline_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_compass_outline_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_compass_outline_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_qrcode_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_qrcode_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_qrcode_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_qrcode_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_qrcode_scan_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_qrcode_scan_white_18dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_qrcode_scan_white_24dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_qrcode_scan_white_36dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_qrcode_scan_white_48dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_server_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_server_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_server_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_server_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_server_plus_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_server_plus_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_server_plus_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_server_plus_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_compass_outline_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_compass_outline_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_compass_outline_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_compass_outline_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_server_plus_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_server_plus_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_server_plus_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_server_plus_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_server_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_server_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_server_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_server_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_qrcode_scan_white_48dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_qrcode_scan_white_36dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_qrcode_scan_white_24dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_qrcode_scan_white_18dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_qrcode_scan_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_qrcode_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_qrcode_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_qrcode_grey600_24dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_qrcode_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_compass_outline_grey600_48dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_compass_outline_grey600_36dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_compass_outline_grey600_18dp.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_compass_outline_grey600_24dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\dimens.xml" />
   </ItemGroup>
 </Project>

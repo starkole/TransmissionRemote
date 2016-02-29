@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="@string/preference_key_server_qrcode_summary"
+        android:icon="@drawable/ic_qrcode_grey600_36dp"
+        android:title="@string/preference_title_server_qrcode_summary"
+        android:summary="@string/preference_summary_server_qrcode_summary" />
+    <EditTextPreference
+        android:icon="@drawable/ic_server_grey600_36dp"
+        android:key="@string/preference_key_server_address"
+        android:title="@string/preference_title_server_address"
+        android:summary="@string/preference_summary_default_value"
+        android:defaultValue=""
+        android:dialogTitle="@string/preference_title_server_address" />
+    <EditTextPreference
+        android:icon="@drawable/ic_compass_outline_grey600_36dp"
+        android:key="@string/preference_key_server_port"
+        android:title="@string/preference_title_server_port"
+        android:summary="@string/preference_summary_default_value"
+        android:defaultValue=""
+        android:dialogTitle="@string/preference_title_server_port" />
+    <EditTextPreference
+        android:icon="@drawable/ic_server_plus_grey600_36dp"
+        android:key="@string/preference_key_server_additional_address"
+        android:title="@string/preference_title_server_additional_address"
+        android:summary="@string/preference_summary_default_value"
+        android:defaultValue=""
+        android:dialogTitle="@string/preference_title_server_additional_address" />
+</PreferenceScreen>

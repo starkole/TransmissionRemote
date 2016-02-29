@@ -16,6 +16,7 @@ using Java.Lang;
 using Android.Support.Design.Widget;
 using Android.Support.V4.View;
 using TransmissionRemote.Models.Enums;
+using TransmissionRemote.Droid.Preferences;
 
 namespace TransmissionRemote.Droid
 {
@@ -30,7 +31,7 @@ namespace TransmissionRemote.Droid
         private DrawerLayout drawerLayout;
         private static readonly string[] drawerMenuSections =
             {
-                "Browse", "Friends", "Profile", "All Torrents List"
+                "Browse", "Settings", "Profile", "All Torrents List"
             };
 
         #endregion
@@ -143,8 +144,7 @@ namespace TransmissionRemote.Droid
                         this.createFragment(firstItemFragment);
                         break;
                     case 1:
-                        var secondItemFragment = new SecondItemFragment();
-                        this.createFragment(secondItemFragment);
+                        this.createFragment(new ServerPreferencesFragment());
                         break;
                     case 2:
                         var thirdItemFragment = new ThirdItemFragment();

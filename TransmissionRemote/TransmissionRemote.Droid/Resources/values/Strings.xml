@@ -1,11 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string
-        name="app_name">Transmission Remote</string>
-    <string
-        name="drawer_open">Open</string>
-    <string
-        name="drawer_close">Close</string>
-    <string
-        name="internal">INTERNAL</string>
+    <string name="app_name">Transmission Remote</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="internal">INTERNAL</string>
+    <string name="qrcode_generation_error">Cannot generate QR code</string>
+    <string name="qrcode_scanner_top_text">Hold the camera up to the barcode \nabout 15 cm away</string>
+    <string name="qrcode_scanner_bottom_text">Wait for the barcode to automatically scan \nor press "Back" button to cancel</string>
+    <string name="qrcode_scanner_nothing_scanned_message">No QR code was scanned</string>
+    <string name="qrcode_scanner_invalid_qrcode_message">QR code does not contain valid address</string>
+    <string name="preference_key_server_address">server_address</string>
+    <string name="preference_key_server_port">server_port</string>
+    <string name="preference_key_server_additional_address">server_additional_address</string>
+    <string name="preference_key_server_qrcode_summary">server_qrcode_summary</string>
+    <string name="preference_title_server_address">Server address</string>
+    <string name="preference_title_server_port">Server port</string>
+    <string name="preference_title_server_additional_address">Address string (optional)</string>
+    <string name="preference_title_server_qrcode_summary">QR Code</string>
+    <string name="preference_summary_default_value">(value not set)</string>
+    <string name="preference_summary_server_qrcode_summary">See current address as QR code</string>
 </resources>
